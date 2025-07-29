@@ -31,7 +31,7 @@ conversion_rates = api.get_conversion_rates()
 # print(conversion_rates)
 # print(api.get_conversion_currency("AED"))
         
-# response = requests.get("https://v6.exchangerate-api.com/v6/c23c29d5c2e3e6c4fef36f9a/latest/USD")
+# response = requests.get("https://v6.exchangerate-api.com/v6/API_KEY/latest/USD")
 
 # response_json = json.loads(response.text)
 
