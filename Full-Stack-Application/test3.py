@@ -1,7 +1,7 @@
 import requests 
 import json
 
-response = requests.get("https://api.polygon.io/v3/reference/dividends?apiKey=aGq_7paKv6vFr1rRG59gaypSOpXorYWp")
+response = requests.get("https://api.polygon.io/v3/reference/dividends?apiKey=API_KEY")
 
 response_json = json.loads(response.text)
 
