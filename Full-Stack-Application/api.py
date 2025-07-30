@@ -23,10 +23,10 @@ class API:
         response_json = json.loads(response.text)
         return response_json['conversion_rates']
     
-    def get_conversion_currency(self):
-        response = requests.get(self.api_url)
-        response_json = json.loads(response.text)
-        return response_json['conversion_rates']['currency']
+    # def get_conversion_currency(self):
+    #     response = requests.get(self.api_url)
+    #     response_json = json.loads(response.text)
+    #     return response_json['conversion_rates']['currency']
         
 api = API()
 conversion_rates = api.get_conversion_rates()
