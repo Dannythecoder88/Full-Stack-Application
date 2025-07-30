@@ -3,6 +3,8 @@ import requests
 import json
 import os
 from dotenv import load_dotenv
+import yfinance as yf
+
 
 load_dotenv()
 API_KEY = os.getenv("Exchange_Rate_API")
@@ -28,6 +30,64 @@ class API:
         
 api = API()
 conversion_rates = api.get_conversion_rates()
+
+
+
+# class STOCK:
+#     def get_stock_price_usd(ticker):
+#        stock = yf.Ticker(ticker)
+#        return stock.info['regularMarketPrice']
+
+class STOCK:
+    def __init__(self):
+        self.available_stocks = []
+
+    def get_stock_price_usd(self, ticker):
+        stock = yf.Ticker(ticker)
+        return stock.info.get("regularMarketPrice")
+    def get_company_name(self, ticker):
+            stock = yf.Ticker(ticker)
+            return stock.info.get("longName")
+
+class LOGIC:
+    def __init__(self):
+        self.available_stocks = []
+
+    def get_math(self, ticker):
+        stock = yf.Ticker(ticker)
+        return stock.info.get("regularMarketPrice")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # print(conversion_rates)
 # print(api.get_conversion_currency("AED"))
         
