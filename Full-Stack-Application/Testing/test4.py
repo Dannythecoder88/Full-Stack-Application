@@ -13,3 +13,4 @@ print("Price (USD):", price)
 print("Sector:", sector)
 print("history:", history)
 
+print(ticker.info)

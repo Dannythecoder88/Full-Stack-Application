@@ -9,10 +9,8 @@ from api import API
 from api import STOCK
 # Imports from the cass called STOCK from the api.py file
 from api import GRAPH
-import plotly.express as px
 
-import pandas as pd
-
+from api import TABLE
 
 #_____________________________________________________________________
 
@@ -55,18 +53,19 @@ st.subheader("Stock Conversion")
 stock = STOCK()
 # Calls from the STOCK class in the backend
 
-stock_selection_usd = st.text_input("Choose a stock", value="AAPL", key="1")
+
+stock_selection = st.text_input("Enter a stock", value = "AAPL", key="shared1")
 # Box allowing you to enter a stock you want to convert from USD to amount of shares using its ticker (ex. AAPL, MSFT)
 
 stock_amount_usd = st.number_input("Enter amount in USD to convert to shares:", min_value=0.0, format="%.2f", step=1.0, key="usd_input_2")
 # Box allowing you to input the amount you want to convert to shares of a stock
 
-company_name = stock.get_company_name(stock_selection_usd)
+company_name = stock.get_company_name(stock_selection)
 # Fetches from the STOCK class what the company you chose's name is
 
-if stock_selection_usd:
+if stock_selection:
 # For the stock selected do the following as seen below:
-    price1 = stock.get_stock_price_usd(stock_selection_usd)
+    price1 = stock.get_stock_price_usd(stock_selection)
 # Fetches from the STOCK class in the backend and pulls the stock price in USD of one stock of the company selected
     if price1:
 # For the price of one stock of the given company, do the following as shown below:
@@ -83,19 +82,18 @@ if stock_selection_usd:
 
 st.subheader("Stock To Currency")
 # Subheader
-stock_selection_currency = st.text_input("Enter a stock", value = "AAPL", key="2")
-# Box allowing you to enter the ticker (ex. AAPL, MSFT) for the stock you want
+
 currency_selection2 = st.selectbox("Choose a currency", list(conversion_rates.keys()), key ='3')
 # Allows you to select the currency you want so that you can convert it to shares of the stock you chose
-company_name = stock.get_company_name(stock_selection_currency)
+company_name = stock.get_company_name(stock_selection)
 # Fetches from the STOCK class in the backend and gets the name of the company, rather than just the ticker
 stock_amount_currency = st.number_input(f"Enter amount in {currency_selection2} to convert to shares of {company_name}:", min_value=0.0, format="%.2f", step=1.0, key="usd_input_3")
 # Box allowing you to enter the amount of the currency you selected (currency_selection2) to convert to shares of the company you chose and uses the (company_name) function because it converted the ticker (ex.AAPL) to its actual name.
 # Ex of use. 600 AED to 1 share of apple inc. (Enter amount in AED to convert to shares of APPLE INC.)
 
-if stock_selection_currency:
+if stock_selection:
 # For the stock selected do the following as seen below:
-    price2 = stock.get_stock_price_usd(stock_selection_currency)
+    price2 = stock.get_stock_price_usd(stock_selection)
 # Fetches from the STOCK class in the backend and gets the stock price of one stock of the stock you selected 
     #1 stock of Apple Inc. = $209
     rate2 = conversion_rates[currency_selection2]
@@ -120,19 +118,20 @@ if stock_selection_currency:
 st.subheader("Stock Trends")
 
 graph = GRAPH()
-stock_selection_trends = st.text_input("Enter a stock", value = "AAPL", key="6")
 
 time = st.selectbox("Select time range:", ['1d', '5d', '1mo', '6mo', '1Y', '5Y' ] )
 
 graph_type = st.selectbox("Select graph type:", ['Standard', 'CandleStick'] )
 
 
-if stock_selection_trends:
-    history = graph.get_company_history(stock_selection_trends, time)
+if stock_selection:
+    history = graph.get_company_history(stock_selection, time)
     if history.empty:
         st.warning("No data available for this stock")
     else: 
-        fig = graph.generate_chart(history, graph_type)
+        company_name = stock.get_company_name(stock_selection)
+        chart_title = f"{company_name} Stock Trends" 
+        fig = graph.generate_chart(history, graph_type, title = chart_title)
         st.plotly_chart(fig)
 
 # pd.options.plotting.backend = "plotly"
@@ -140,3 +139,13 @@ if stock_selection_trends:
 # df = pd.DataFrame(dict(history))
 # fig = df.plot.line()
 # st.plotly_chart(fig)
+
+#____________________________________________________________________
+st.subheader("Company Info")
+table = TABLE()
+
+if stock_selection:
+        company_name = stock.get_company_name(stock_selection)
+        table_title = f"{company_name} Info" 
+        fig = table.generate_table(stock_selection, title = table_title)
+        st.plotly_chart(fig)

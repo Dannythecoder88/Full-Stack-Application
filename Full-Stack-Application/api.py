@@ -58,6 +58,8 @@ conversion_rates = api.get_conversion_rates()
 # So, 'self' is not a normal variable; it represents the instance (the specific object).
 # This allows the method to access or change the object's data and call other methods.
 
+#_______________________________________________________________________________________________________
+
 class STOCK:
 #Creates a class called STOCK
     def __init__(self):
@@ -83,35 +85,63 @@ class STOCK:
         return stock.info.get("longName")
 # This allows is to access the name of the stock we chose by acessing the yfinance api
    
+#_______________________________________________________________________________________________________
 
 pd.options.plotting.backend = "plotly"
 
 class GRAPH:
     def __init__(self):
-        self.available_stocks = []
+        pass
     def get_company_history(self, ticker, period):
         stock = yf.Ticker(ticker)
         return stock.history(period=period)
 
-    def generate_chart(self, df, chart_type):
+    def generate_chart(self, df, chart_type, title="Stock Trends"):
         if chart_type == 'Standard':
-            return df.plot.line()
-        elif chart_type == 'CandleStick':
-            return go.Figure(go.Candlestick(
-                x=df.index,
-                open=df['Open'],
-                high=df['High'],
-                low=df['Low'],
-                close=df['Close']
-            ))
+            return df.plot.line(title=title)
+        fig = go.Figure(go.Candlestick(
+            x=df.index,
+            open=df['Open'],
+            high=df['High'],
+            low=df['Low'],
+            close=df['Close']
+        ))
+        fig.update_layout(title=title)
+        return fig
 
+#_______________________________________________________________________________________________________
 
+class TABLE():
+    def generate_table(self, ticker, title="Info"):
+        stock = yf.Ticker(ticker)
+        info = stock.info
 
+        fields = {
+            "Long Name": info.get("longName"),
+            "Sector": info.get("sector"),
+            "Industry": info.get("industry"),
+            "Country": info.get("country"),
+            "City": info.get("city"),
+            "State": info.get("state"),
+            "Website": info.get("website"),
+            "Currency": info.get("currency"),
+            "Market Cap": info.get("marketCap"),
+            "Regular Market Price": info.get("regularMarketPrice")
+        }
 
+        labels = list(fields.keys())
+        values = list(fields.values())
 
-
-
-
+        fig = go.Figure(data=[go.Table(
+            header=dict(values=["Field", "Value"],
+                fill_color='blue',
+                align='left'),
+            cells=dict(values=[labels, values],
+                fill_color='black',
+                align='left'))
+        ])
+        fig.update_layout(title=title)
+        return fig
 
 
 
