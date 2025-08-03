@@ -1,6 +1,19 @@
 import streamlit as st
 from api import STOCK
 from api import TABLE
+from auth import require_login, sign_out
+
+require_login()  
+
+with st.sidebar:
+    if st.button("Logout"):
+        sign_out()
+
+st.set_page_config(
+    page_title="Currency & Stock Conversion App"
+)
+
+#________________________________________________________________________________________________
 
 st.title = ("Company Info")
 # This creates a subheader called 'Company Info'

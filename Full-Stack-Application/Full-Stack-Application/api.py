@@ -199,36 +199,50 @@ class TABLE():
 
 
 class LOGIC:
+# Creates a class called LOGIC
     def __init__(self):
         pass 
 
     def usd_to_currency(self, amount, rate):
+# Creates a method (function within a class) called usd_to_currency that has two arguments (amount and rate), this essentially will help convert usd to a different currency by m,ultiplying it by the currencies conversion rate
        return amount * rate
-    def stock_to_shares(self,  stock_amount_usd, price1 ):
-        return stock_amount_usd/price1
-        
+# Multiples the aamount by the rate in order to get the conversion from usd to a different currency
+    def currency_to_shares(self,  stock_amount, price1 ):
+# This helps convert how much money you have in a currency to shares of a company (ex. You have 200 Yen put into Apple Inc. and it converts it to how many shares you have by dividing the 200 yen by the price of one share of Apple Inc. in yen)
+        return stock_amount/price1
+# Divides how much money you have in a currency by the price of one share of a specific company
 #________________________________________________________________________________________________
 
 class AI:
+# Creates a class called AI
     def __init__(self):
         pass 
     def get_ai_response(self, user_input):
+# Createa a method called get_ai_response that has the argument user_input
         client = openai.OpenAI(api_key=API_KEY2)
-
+# This creates a vafriable called client that acesses the open ai api key, allowinng us to use open ai in our code
         response = client.responses.create(
+# Creates a variable that accesses the client variable, which helps acess open ai and send a prompt to it
             model='gpt-4.1',
+# Uses Open Ai's gpt-4.1 model
             input=[
+# What gpt recieves:
                 {
                     "role": "assistant",
+# Assigns gpt with its specific role
                     "content": "You are a smart, confident Wall Street stock analyst who only responds to questions related to stock markets, currency conversion, or businesses that have a ticker in the yfinance library(stock tickers). You give moderate sized/long, professional answers with occasional references to market trends or ticker symbols. If a question is not related to stock, a bussiness that has a ticker (stock ticker), or currency, respond only with: \"Not a stock, business, or currency related question."
+# Explains what kind od assistsant gpt is in this situation
                 },
                 {
                     "role": "user",
+#nThis is the role of the person prompting gpt, and in this situation we are the user
                     "content": user_input
+# The user's input is user_input, which in the frontend will be what we input into the textbox, thus allowing us to ask gpt questions
                 }
             ]
         )
         return response.output_text
+# Returns the reponse in a text output
 
 #________________________________________________________________________________________________
 

@@ -1,9 +1,19 @@
 import streamlit as st
 from api import STOCK
 from api import LOGIC
+from auth import require_login, sign_out
 
+require_login()  
 
+with st.sidebar:
+    if st.button("Logout"):
+        sign_out()
 
+st.set_page_config(
+    page_title="Currency & Stock Conversion App"
+)
+
+#________________________________________________________________________________________________
 
 st.title = ("Stock Conversion")
 # Subheader
@@ -27,7 +37,7 @@ if stock_selection:
 # Fetches from the STOCK class in the backend and pulls the stock price in USD of one stock of the company selected
     if price1:
 # For the price of one stock of the given company, do the following as shown below:
-        shares1 = logic.stock_to_shares(stock_amount_usd, price1)
+        shares1 = logic.currency_to_shares(stock_amount_usd, price1)
 # Divides the amount of money in USD youy want to convert to stocks (ex.250), by the price of a single stock (ex.250/220 for an apple stock), thus giving you how many shares of a single company you have
         st.write(f"${stock_amount_usd: .2f} = {shares1: .5f} shares of {company_name} (1 share = ${price1: .2f})")
 # Writes that the amount of money you inputted (stock_amount_usd) is equivalent to however many shares (shares1) it converted to as seen above, then gives the name of the company (company_name) (ex. 0.1 SHARES OF APPLE INC.), then gives you the price of a single stock from the get_stock_price_usd that was fetched from the backend STOCK class (price1) (ex. 1 share = $200)

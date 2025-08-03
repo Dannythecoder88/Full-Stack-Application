@@ -2,9 +2,19 @@ import streamlit as st
 from api import API
 from api import STOCK
 from api import LOGIC
+from auth import require_login, sign_out
 
+require_login()  
 
+with st.sidebar:
+    if st.button("Logout"):
+        sign_out()
 
+st.set_page_config(
+    page_title="Currency & Stock Conversion App"
+)
+
+#________________________________________________________________________________________________
 
 stock = STOCK()
 logic = LOGIC()
@@ -16,6 +26,7 @@ st.title = ("Stock To Currency")
 stock_selection = st.text_input("Enter a stock", value = "AAPL", key="shared2")
 
 conversion_rates = api.get_conversion_rates()  
+# Gets the exchange rates from the Exchange rate API, through the api class in the backend that has access to it
 
 currency_selection2 = st.selectbox("Choose a currency", list(conversion_rates.keys()), key ='3')
 # Allows you to select the currency you want so that you can convert it to shares of the stock you chose
@@ -41,7 +52,7 @@ if stock_selection:
 
     if price2:
 # For the price of one stock of the stock chose do the following as seen below:
-        shares2 = logic.stock_to_shares(stock_amount_currency, overall)
+        shares2 = logic.currency_to_shares(stock_amount_currency, overall)
 # Uses the amount of the currency you selected (ex. 600AED) and divides it by the cost of one stock share in that given currency, thus giving you how many shares you have of a stock using a different currency to buy those shares 
         #2200/770 = shares of a stock you have (2200 AED / 770 AED (1 share) = how many shares you have) 
         st.write(f" ${stock_amount_currency:.2f} {currency_selection2} = {shares2:.5f} shares of {company_name} (1 share = ${overall:.2f})")
