@@ -1,0 +1,31 @@
+import streamlit as st
+from supabase import create_client, Client
+import os
+from auth import require_login, sign_out
+from api import STOCK, GRAPH, TABLE
+
+require_login()
+
+supabase_url = os.getenv("SUPABASE_URL")
+supabase_key = os.getenv("SUPABASE_KEY")
+supabase: Client = create_client(supabase_url, supabase_key)
+
+user_email = st.session_state.get("user_email")
+
+with st.sidebar:
+    if st.button("Logout"):
+        sign_out()
+
+stock = STOCK()
+graph = GRAPH()
+table = TABLE()
+
+st.subheader("My Stock Watchlist")
+
+st.subheader("Search and Add a Stock")
+
+input = st.text_input("Enter Stock Ticker:")
+
+if input:
+    company_name = stock.get_company_name(input)
+    
